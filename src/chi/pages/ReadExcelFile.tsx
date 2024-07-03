@@ -9,6 +9,13 @@ interface DatoHoja {
   [key: string]: string | number | boolean | null;
 }
 
+interface TablaContigencia {
+  positivoPositivo: number;
+  positivoNegativo: number;
+  negativoNegativo: number;
+  negativoPositivo: number;
+}
+
 const ReadExcelFile = () => {
   const [datosHoja, setDatosHoja] = useState<DatoHoja[]>([]); //* puede contener un arreglo de cualquier tipo de datos
   const [itemsSeleccionados, setItemsSeleccionados] = useState<string[]>([]);
@@ -16,6 +23,13 @@ const ReadExcelFile = () => {
   const [datosTablaContigencia, setDatosTablaContigencia] = useState<
     DatoHoja[]
   >([]);
+  const [tablaDeContigencia, setTablaDeContigencia] =
+    useState<TablaContigencia>({
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    });
 
   const manejarCargaArchivo = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -38,6 +52,7 @@ const ReadExcelFile = () => {
 
     lector.readAsBinaryString(archivo);
   };
+  //*esta funcion es para poder hacer la tabla de contigencia
   const handleItemsSelected = (e: string[]): void => {
     if (e.length > 2) {
       setIsValid(true);
@@ -46,6 +61,32 @@ const ReadExcelFile = () => {
       setItemsSeleccionados(e);
     }
   };
+  const tablaContigencia = (): void => {
+    const [dato1, dato2] = itemsSeleccionados;
+    const contador = {
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    };
+
+    datosTablaContigencia.forEach((dato) => {
+      const valor1 = dato[dato1];
+      const valor2 = dato[dato2];
+
+      if (valor1 && valor2) {
+        contador.positivoPositivo++;
+      } else if (valor1 && !valor2) {
+        contador.positivoNegativo++;
+      } else if (!valor1 && !valor2) {
+        contador.negativoNegativo++;
+      } else if (!valor1 && valor2) {
+        contador.negativoPositivo++;
+      }
+    });
+    setTablaDeContigencia(contador);
+  };
+
   const handleSelectItemsSubmit = (): void => {
     if (isValid || itemsSeleccionados.length < 2) {
       toast.error("Solo puedes seleccionar DOS items");
@@ -59,10 +100,10 @@ const ReadExcelFile = () => {
       });
       return nuevoDato;
     });
-    //*estos son los nuevos dato seleccionados por el usuario con sus respectivos valores
+
     setDatosTablaContigencia(nuevosDatosFiltrados);
+    tablaContigencia();
   };
-  console.log(datosTablaContigencia);
 
   return (
     <div className=" container mx-auto">
@@ -86,33 +127,101 @@ const ReadExcelFile = () => {
               <p className="text-xs text-gray-500">xlsx, xls</p>
             </div>
           </div>
-          {datosHoja.length > 0 && (
-            <div className="mt-5">
-              <CheckboxGroup
-                isInvalid={isValid}
-                onChange={(e) => {
-                  handleItemsSelected(e);
-                }}
-                label="Selecciona solo dos items"
-              >
-                {Object.keys(datosHoja[0]).map((colum) => (
-                  <Checkbox key={colum} value={colum}>
-                    {colum}
-                  </Checkbox>
-                ))}
-              </CheckboxGroup>
-              <div className="mt-2">
-                <Button
-                  onClick={handleSelectItemsSubmit}
-                  radius="sm"
-                  color="primary"
-                  size="lg"
-                >
-                  Seleccionar
-                </Button>
+          <div className=" ">
+            {datosHoja.length > 0 && (
+              <div className="mt-5 grid grid-cols-2">
+                <div>
+                  <CheckboxGroup
+                    isInvalid={isValid}
+                    onChange={(e) => {
+                      handleItemsSelected(e);
+                    }}
+                    label="Selecciona solo dos items"
+                  >
+                    {Object.keys(datosHoja[0]).map((colum) => (
+                      <Checkbox key={colum} value={colum}>
+                        {colum}
+                      </Checkbox>
+                    ))}
+                  </CheckboxGroup>
+                  <div className="mt-2">
+                    <Button
+                      onClick={handleSelectItemsSubmit}
+                      radius="sm"
+                      color="primary"
+                      size="lg"
+                    >
+                      Seleccionar
+                    </Button>
+                  </div>
+                </div>
+
+                {/**
+                 * En esta parte se imprimira los datos de la tabla de contingencia
+                 */}
+                <div>
+                  <h1 className="text-3xl font-thin mb-5">
+                    Tabla de contigencia
+                  </h1>
+                  <table className="min-w-full bg-white border-gray-200 shadow-md rounded-lg overflow-hidden">
+                    <thead className="bg-gray-100">
+                      <tr className="border-b-2 border-gray-300 py-2 px-4 text-left text-sm font-semibold text-gray-700">
+                        <th></th>
+                        <th>{itemsSeleccionados[1]}</th>
+                        <th>{itemsSeleccionados[1]}</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    {/** Datos de la tabla */}
+                    <tbody>
+                      <tr className="text-center">
+                        {/**Nombre de la fila 1*/}
+                        <td>{itemsSeleccionados[0]}</td>
+                        {/**datos de primera fila */}
+                        <td>{tablaDeContigencia.positivoPositivo}</td>
+                        <td>{tablaDeContigencia.positivoNegativo}</td>
+                        {/**Total de la fila 1 */}
+                        <td>
+                          {tablaDeContigencia.positivoPositivo +
+                            tablaDeContigencia.positivoNegativo}
+                        </td>
+                      </tr>
+                      <tr className="text-center">
+                        {/**Nombre de la fila 1*/}
+                        <td>{itemsSeleccionados[1]}</td>
+                        {/**Datos de la segunda fila */}
+                        <td>{tablaDeContigencia.negativoPositivo}</td>
+                        <td>{tablaDeContigencia.negativoNegativo}</td>
+                        {/**Total de la fila 2 */}
+                        <td>
+                          {tablaDeContigencia.negativoPositivo +
+                            tablaDeContigencia.negativoNegativo}
+                        </td>
+                      </tr>
+                      <tr className="text-center">
+                        <td>Total</td>
+                        <td>
+                          {tablaDeContigencia.positivoPositivo +
+                            tablaDeContigencia.negativoPositivo}
+                        </td>
+                        <td>
+                          {tablaDeContigencia.positivoNegativo +
+                            tablaDeContigencia.negativoNegativo}
+                        </td>
+                        {/**Total de la general */}
+                        <td>
+                          {tablaDeContigencia.positivoPositivo +
+                            tablaDeContigencia.positivoNegativo +
+                            tablaDeContigencia.negativoPositivo +
+                            tablaDeContigencia.negativoNegativo}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         <div>
