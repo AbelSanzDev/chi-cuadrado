@@ -4,25 +4,42 @@ import MostrarTablaConDatos from "../components/MostrarTablaConDatos";
 import { Button, Checkbox, CheckboxGroup } from "@nextui-org/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+//*Interfaz de los datos que puede recibir por el excel y es puede recibir un objeto d llave tipo string con datos tipo string | number | boolean | null;
 interface DatoHoja {
   [key: string]: string | number | boolean | null;
 }
-
+//*interfaz de la tabla de contigencia como se deben de ver los datos
 interface TablaContigencia {
   positivoPositivo: number;
   positivoNegativo: number;
   negativoNegativo: number;
   negativoPositivo: number;
 }
-
+//*Interfaz de como seran los datos de cobertura y canfianza
+interface CoberturaConfianzaDatos {
+  //*Cuando se comienza con el item 1
+  positivoPositivoItem1AHead: number[];
+  positivoNegativoItem1AHead: number[];
+  negativoNegativoItem1AHead: number[];
+  negativoPositivoItem1AHead: number[];
+  //*Cuando se comienza con el item 2
+  positivoPositivoItem2AHead: number[];
+  positivoNegativoItem2AHead: number[];
+  negativoNegativoItem2AHead: number[];
+  negativoPositivoItem2AHead: number[];
+}
 const ReadExcelFile = () => {
+  //*En este useState se alamcenan todos los datos de la hoja de excel que se quiere ver
   const [datosHoja, setDatosHoja] = useState<DatoHoja[]>([]); //* puede contener un arreglo de cualquier tipo de datos
+  //*Esta alamacena los items seleccionadaso por el usuario en un arreglo
   const [itemsSeleccionados, setItemsSeleccionados] = useState<string[]>([]);
+  //*Este useState es para poder lanzar el mansaje de validacion en caso de que se seleccionen mas de dos items
   const [isValid, setIsValid] = useState<boolean>(false);
+  //*Este useState es en donde se alamcenan los datos de los dos items
   const [datosTablaContigencia, setDatosTablaContigencia] = useState<
     DatoHoja[]
   >([]);
+  //*Este useState es para los datos de la tabla de contigencia
   const [tablaDeContigencia, setTablaDeContigencia] =
     useState<TablaContigencia>({
       positivoPositivo: 0,
@@ -30,7 +47,21 @@ const ReadExcelFile = () => {
       negativoNegativo: 0,
       negativoPositivo: 0,
     });
-
+  //*Este useState es para el valor de los datos de confianza y cobertura de la tabla de contigencia
+  const [coberturaConfianzaValores, setCoberturaConfianzaValores] =
+    useState<CoberturaConfianzaDatos>({
+      //*Cuando se comienza con el item 1
+      positivoPositivoItem1AHead: [0, 0],
+      positivoNegativoItem1AHead: [0, 0],
+      negativoPositivoItem1AHead: [0, 0],
+      negativoNegativoItem1AHead: [0, 0],
+      //*Cuando se comienza con el item 2
+      positivoPositivoItem2AHead: [0, 0],
+      positivoNegativoItem2AHead: [0, 0],
+      negativoPositivoItem2AHead: [0, 0],
+      negativoNegativoItem2AHead: [0, 0],
+    });
+  //*leemos el excel con esta funcion
   const manejarCargaArchivo = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
@@ -86,8 +117,53 @@ const ReadExcelFile = () => {
     });
     setTablaDeContigencia(contador);
   };
-
-  const handleSelectItemsSubmit = (): void => {
+  //*Se sacara confianza y cobertura en base a la tabla de contigencia
+  const coberturaConfianzaFn = (): void => {
+    const {
+      positivoPositivo,
+      positivoNegativo,
+      negativoPositivo,
+      negativoNegativo,
+    } = tablaDeContigencia;
+    //*Calculos de cobertura y confianza
+    setCoberturaConfianzaValores({
+      positivoPositivoItem1AHead: [
+        positivoPositivo,
+        (positivoPositivo / (positivoPositivo + positivoNegativo)) * 100,
+      ],
+      positivoNegativoItem1AHead: [
+        positivoNegativo,
+        (positivoNegativo / (positivoPositivo + positivoNegativo)) * 100,
+      ],
+      negativoPositivoItem1AHead: [
+        negativoPositivo,
+        (negativoPositivo / (negativoPositivo + negativoNegativo)) * 100,
+      ],
+      negativoNegativoItem1AHead: [
+        negativoNegativo,
+        (negativoNegativo / (negativoPositivo + negativoNegativo)) * 100,
+      ],
+      //*Cuando se comienza con el item 2
+      positivoPositivoItem2AHead: [
+        positivoPositivo,
+        (positivoPositivo / (positivoPositivo + negativoPositivo)) * 100,
+      ],
+      positivoNegativoItem2AHead: [
+        negativoPositivo,
+        (negativoPositivo / (positivoPositivo + negativoPositivo)) * 100,
+      ],
+      negativoPositivoItem2AHead: [
+        positivoNegativo,
+        (positivoNegativo / (positivoNegativo + negativoNegativo)) * 100,
+      ],
+      negativoNegativoItem2AHead: [
+        negativoNegativo,
+        (negativoNegativo / (positivoNegativo + negativoNegativo)) * 100,
+      ],
+    });
+  };
+  console.log(coberturaConfianzaValores);
+  const handleSelectItemsSubmit = async (): Promise<void> => {
     if (isValid || itemsSeleccionados.length < 2) {
       toast.error("Solo puedes seleccionar DOS items");
       return;
@@ -100,9 +176,12 @@ const ReadExcelFile = () => {
       });
       return nuevoDato;
     });
-
+    //*Los nuevos datos fitrados osea los dos items
     setDatosTablaContigencia(nuevosDatosFiltrados);
-    tablaContigencia();
+    //*Se llama la funcion de la tabla de contigencia para poder crear la misma
+    await tablaContigencia();
+    //*Se llama la funcion coberturaConfianzaFn para poder determinar la cobertura y confianza de nuestra tabla de contigencia
+    coberturaConfianzaFn();
   };
 
   return (
@@ -155,7 +234,6 @@ const ReadExcelFile = () => {
                     </Button>
                   </div>
                 </div>
-
                 {/**
                  * En esta parte se imprimira los datos de la tabla de contingencia
                  */}
@@ -167,8 +245,8 @@ const ReadExcelFile = () => {
                     <thead className="bg-gray-100">
                       <tr className="border-b-2 border-gray-300 py-2 px-4 text-left text-sm font-semibold text-gray-700">
                         <th></th>
-                        <th>{itemsSeleccionados[1]}</th>
-                        <th>{itemsSeleccionados[1]}</th>
+                        <th>{itemsSeleccionados[0]}</th>
+                        <th>~{itemsSeleccionados[0]}</th>
                         <th>Total</th>
                       </tr>
                     </thead>
@@ -176,7 +254,7 @@ const ReadExcelFile = () => {
                     <tbody>
                       <tr className="text-center">
                         {/**Nombre de la fila 1*/}
-                        <td>{itemsSeleccionados[0]}</td>
+                        <td>{itemsSeleccionados[1]}</td>
                         {/**datos de primera fila */}
                         <td>{tablaDeContigencia.positivoPositivo}</td>
                         <td>{tablaDeContigencia.positivoNegativo}</td>
@@ -188,7 +266,7 @@ const ReadExcelFile = () => {
                       </tr>
                       <tr className="text-center">
                         {/**Nombre de la fila 1*/}
-                        <td>{itemsSeleccionados[1]}</td>
+                        <td>~{itemsSeleccionados[1]}</td>
                         {/**Datos de la segunda fila */}
                         <td>{tablaDeContigencia.negativoPositivo}</td>
                         <td>{tablaDeContigencia.negativoNegativo}</td>
