@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import MostrarTablaConDatos from "../components/MostrarTablaConDatos";
-import { Button, Checkbox, CheckboxGroup } from "@nextui-org/react";
+import {
+  Button,
+  Checkbox,
+  CheckboxGroup,
+  Radio,
+  RadioGroup,
+} from "@nextui-org/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { chiSquareTable } from "../helpers/chiCuadradoDatosTabla";
 //*Interfaz de los datos que puede recibir por el excel y es puede recibir un objeto d llave tipo string con datos tipo string | number | boolean | null;
 interface DatoHoja {
   [key: string]: string | number | boolean | null;
@@ -84,8 +91,9 @@ const ReadExcelFile = () => {
       negativoNegativo: 0,
       negativoPositivo: 0,
     });
-  //*En este se almacenara el valor de la suma del chi 2
-  const [chiCuadradoResultado, setChiCuadradoResultado] = useState<number>(0);
+  const [confianza, setConfianza] = useState<number>(
+    chiSquareTable[0].confianza[0]
+  );
   //*Este use effect se utiliza para que cuando cambie el valor datosTablaContiugencia se compilen esas dos fuciones las cuales son la logica de todo el codigo
   useEffect(() => {
     //*Se llama la funcion de la tabla de contigencia para poder crear la misma
@@ -234,7 +242,6 @@ const ReadExcelFile = () => {
     const sumaColumna1 = positivoPositivo + negativoPositivo;
     const sumaColumna2 = positivoNegativo + negativoNegativo;
 
-    console.log(sumaFila1, sumaColumna1);
     const ePP = (sumaFila1 * sumaColumna1) / 100;
     const ePN = (sumaFila1 * sumaColumna2) / 100;
     const eNP = (sumaFila2 * sumaColumna1) / 100;
@@ -247,7 +254,11 @@ const ReadExcelFile = () => {
       negativoNegativo: (negativoNegativo - eNN) ** 2 / eNN,
     });
   };
-  console.log(chiCuadradoValores);
+  //*Esta funcion es para poder calcular la confianza
+  const confianzaFn = (e: string): void => {
+    const valor = parseInt(e);
+    setConfianza(chiSquareTable[0].confianza[valor]);
+  };
   const handleSelectItemsSubmit = (): void => {
     if (isValid || itemsSeleccionados.length < 2) {
       toast.error("Solo puedes seleccionar DOS items");
@@ -561,6 +572,36 @@ const ReadExcelFile = () => {
                         </tr>
                       </tbody>
                     </table>
+                    <h1 className="text-3xl font-thin my-5">Chi-cuadrado</h1>
+                    <div>
+                      <h1>
+                        {chiCuadradoValores.positivoPositivo.toFixed(3)} +{" "}
+                        {chiCuadradoValores.positivoNegativo.toFixed(3)} +{" "}
+                        {chiCuadradoValores.negativoPositivo.toFixed(3)} +{" "}
+                        {chiCuadradoValores.negativoNegativo.toFixed(3)} ={" "}
+                        <strong>
+                          {(
+                            chiCuadradoValores.positivoPositivo +
+                            chiCuadradoValores.positivoNegativo +
+                            chiCuadradoValores.negativoPositivo +
+                            chiCuadradoValores.negativoNegativo
+                          ).toFixed(3)}
+                        </strong>
+                      </h1>
+                    </div>
+                    <div className="my-2">
+                      <RadioGroup
+                        label="Selecciona el nivel de confianza"
+                        onValueChange={confianzaFn}
+                        defaultValue={"0"}
+                        orientation="horizontal"
+                      >
+                        <Radio value="0">95%</Radio>
+                        <Radio value="1">99%</Radio>
+                        <Radio value="2">99.99%</Radio>
+                      </RadioGroup>
+                    </div>
+                    <div>{confianza}</div>
                   </div>
                 </div>
               </div>
