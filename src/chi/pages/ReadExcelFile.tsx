@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import MostrarTablaConDatos from "../components/MostrarTablaConDatos";
 import { Button, Checkbox, CheckboxGroup } from "@nextui-org/react";
@@ -61,6 +61,13 @@ const ReadExcelFile = () => {
       negativoPositivoItem2AHead: [0, 0],
       negativoNegativoItem2AHead: [0, 0],
     });
+  //*Este use effect se utiliza para que cuando cambie el valor datosTablaContiugencia se compilen esas dos fuciones las cuales son la logica de todo el codigo
+  useEffect(() => {
+    //*Se llama la funcion de la tabla de contigencia para poder crear la misma
+    tablaContigencia();
+    //*Se llama la funcion coberturaConfianzaFn para poder determinar la cobertura y confianza de nuestra tabla de contigencia
+    coberturaConfianzaFn();
+  }, [datosTablaContigencia]);
   //*leemos el excel con esta funcion
   const manejarCargaArchivo = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -149,11 +156,11 @@ const ReadExcelFile = () => {
         (positivoPositivo / (positivoPositivo + negativoPositivo)) * 100,
       ],
       positivoNegativoItem2AHead: [
-        negativoPositivo,
+        negativoPositivo, //*Es negativoPositivo porque es en base a las coordenadas
         (negativoPositivo / (positivoPositivo + negativoPositivo)) * 100,
       ],
       negativoPositivoItem2AHead: [
-        positivoNegativo,
+        positivoNegativo, //*Es positivoNegativo porque es en base a las coordenadas
         (positivoNegativo / (positivoNegativo + negativoNegativo)) * 100,
       ],
       negativoNegativoItem2AHead: [
@@ -162,8 +169,8 @@ const ReadExcelFile = () => {
       ],
     });
   };
-  console.log(coberturaConfianzaValores);
-  const handleSelectItemsSubmit = async (): Promise<void> => {
+
+  const handleSelectItemsSubmit = (): void => {
     if (isValid || itemsSeleccionados.length < 2) {
       toast.error("Solo puedes seleccionar DOS items");
       return;
@@ -178,10 +185,6 @@ const ReadExcelFile = () => {
     });
     //*Los nuevos datos fitrados osea los dos items
     setDatosTablaContigencia(nuevosDatosFiltrados);
-    //*Se llama la funcion de la tabla de contigencia para poder crear la misma
-    await tablaContigencia();
-    //*Se llama la funcion coberturaConfianzaFn para poder determinar la cobertura y confianza de nuestra tabla de contigencia
-    coberturaConfianzaFn();
   };
 
   return (
@@ -208,7 +211,7 @@ const ReadExcelFile = () => {
           </div>
           <div className=" ">
             {datosHoja.length > 0 && (
-              <div className="mt-5 grid grid-cols-2">
+              <div className="mt-5 flex gap-10">
                 <div>
                   <CheckboxGroup
                     isInvalid={isValid}
@@ -296,6 +299,57 @@ const ReadExcelFile = () => {
                       </tr>
                     </tbody>
                   </table>
+                  <div className="my-5">
+                    <h1 className=" text-3xl font-thin">
+                      Cobertura y Confianza
+                    </h1>
+                    {/**Se imprimen los datos de la cobertura y la confianza */}
+                    <div>
+                      <h2>
+                        Si ({itemsSeleccionados[1]}=1) Entonces{" "}
+                        {itemsSeleccionados[0]} = 1 Cb=
+                        {
+                          coberturaConfianzaValores
+                            .positivoPositivoItem1AHead[0]
+                        }
+                        % Cf=
+                        {
+                          coberturaConfianzaValores
+                            .positivoPositivoItem1AHead[1]
+                        }
+                        %
+                      </h2>
+                      <h2>
+                        Si ({itemsSeleccionados[1]}=1) Entonces{" "}
+                        {itemsSeleccionados[0]} = 0 Cb=20% Cf= 25%
+                      </h2>
+                      <h2>
+                        Si ({itemsSeleccionados[1]}=0) Entonces{" "}
+                        {itemsSeleccionados[0]} = 1 Cb=20% Cf= 25%
+                      </h2>
+                      <h2>
+                        Si ({itemsSeleccionados[1]}=0) Entonces{" "}
+                        {itemsSeleccionados[0]} = 0 Cb=20% Cf= 25%
+                      </h2>
+                      {/**Item dos a head */}
+                      <h2>
+                        Si ({itemsSeleccionados[0]}=1) Entonces{" "}
+                        {itemsSeleccionados[1]} = 1 Cb=20% Cf= 25%
+                      </h2>
+                      <h2>
+                        Si ({itemsSeleccionados[0]}=1) Entonces{" "}
+                        {itemsSeleccionados[1]} = 0 Cb=20% Cf= 25%
+                      </h2>
+                      <h2>
+                        Si ({itemsSeleccionados[0]}=0) Entonces{" "}
+                        {itemsSeleccionados[1]} = 1 Cb=20% Cf= 25%
+                      </h2>
+                      <h2>
+                        Si ({itemsSeleccionados[0]}=0) Entonces{" "}
+                        {itemsSeleccionados[1]} = 0 Cb=20% Cf= 25%
+                      </h2>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
