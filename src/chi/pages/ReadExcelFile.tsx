@@ -205,8 +205,8 @@ const ReadExcelFile = () => {
     setFactorDeDependenciaValores({
       positivoPositivo: (positivoPositivo / (sumaFila1 * sumaColumna1)) * 100,
       positivoNegativo: (positivoNegativo / (sumaFila1 * sumaColumna2)) * 100,
-      negativoNegativo: (negativoNegativo / (sumaFila2 * sumaColumna1)) * 100,
-      negativoPositivo: (negativoPositivo / (sumaFila2 * sumaColumna2)) * 100,
+      negativoNegativo: (negativoNegativo / (sumaFila2 * sumaColumna2)) * 100,
+      negativoPositivo: (negativoPositivo / (sumaFila2 * sumaColumna1)) * 100,
     });
   };
   console.log(factorDeDependenciaValores);
@@ -478,6 +478,51 @@ const ReadExcelFile = () => {
                         %
                       </h2>
                     </div>
+                    <h1 className="text-3xl font-thin mt-5">
+                      Factor de dependencia
+                    </h1>
+                    <table className="min-w-full bg-white border-gray-200 shadow-md rounded-lg overflow-hidden">
+                      <thead className="bg-gray-100">
+                        <tr className="border-b-2 border-gray-300 py-2 px-4 text-left text-sm font-semibold text-gray-700">
+                          <th></th>
+                          <th>{itemsSeleccionados[0]}</th>
+                          <th>~{itemsSeleccionados[0]}</th>
+                        </tr>
+                      </thead>
+                      {/** Datos de la tabla */}
+                      <tbody>
+                        <tr className="text-center">
+                          {/**Nombre de la fila 1*/}
+                          <td>{itemsSeleccionados[1]}</td>
+                          {/**datos de primera fila */}
+                          <td>
+                            {factorDeDependenciaValores.positivoPositivo.toFixed(
+                              4
+                            )}
+                          </td>
+                          <td>
+                            {factorDeDependenciaValores.positivoNegativo.toFixed(
+                              4
+                            )}
+                          </td>
+                        </tr>
+                        <tr className="text-center">
+                          {/**Nombre de la fila 1*/}
+                          <td>~{itemsSeleccionados[1]}</td>
+                          {/**Datos de la segunda fila */}
+                          <td>
+                            {factorDeDependenciaValores.negativoPositivo.toFixed(
+                              4
+                            )}
+                          </td>
+                          <td>
+                            {factorDeDependenciaValores.negativoNegativo.toFixed(
+                              4
+                            )}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
