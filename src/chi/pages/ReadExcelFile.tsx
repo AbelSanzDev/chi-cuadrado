@@ -65,9 +65,12 @@ const ReadExcelFile = () => {
   useEffect(() => {
     //*Se llama la funcion de la tabla de contigencia para poder crear la misma
     tablaContigencia();
+  }, [datosTablaContigencia]);
+  //*En ese useEffect se llama a la funcion coberturaConfianzaFn una vez tenga datos tablaDeContigencia
+  useEffect(() => {
     //*Se llama la funcion coberturaConfianzaFn para poder determinar la cobertura y confianza de nuestra tabla de contigencia
     coberturaConfianzaFn();
-  }, [datosTablaContigencia]);
+  }, [tablaDeContigencia]);
   //*leemos el excel con esta funcion
   const manejarCargaArchivo = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -307,46 +310,135 @@ const ReadExcelFile = () => {
                     <div>
                       <h2>
                         Si ({itemsSeleccionados[1]}=1) Entonces{" "}
-                        {itemsSeleccionados[0]} = 1 Cb=
-                        {
-                          coberturaConfianzaValores
-                            .positivoPositivoItem1AHead[0]
-                        }
-                        % Cf=
-                        {
-                          coberturaConfianzaValores
-                            .positivoPositivoItem1AHead[1]
-                        }
+                        {itemsSeleccionados[0]} = 1 Cb={" "}
+                        <strong>
+                          {coberturaConfianzaValores.positivoPositivoItem1AHead[0].toFixed(
+                            2
+                          )}
+                        </strong>
+                        % Cf={" "}
+                        <strong>
+                          {coberturaConfianzaValores.positivoPositivoItem1AHead[1].toFixed(
+                            2
+                          )}
+                        </strong>
                         %
                       </h2>
                       <h2>
                         Si ({itemsSeleccionados[1]}=1) Entonces{" "}
-                        {itemsSeleccionados[0]} = 0 Cb=20% Cf= 25%
+                        {itemsSeleccionados[0]} = 0 Cb={" "}
+                        <strong>
+                          {coberturaConfianzaValores.positivoNegativoItem1AHead[0].toFixed(
+                            2
+                          )}
+                        </strong>
+                        % Cf={" "}
+                        <strong>
+                          {" "}
+                          {coberturaConfianzaValores.positivoNegativoItem1AHead[1].toFixed(
+                            2
+                          )}
+                        </strong>
+                        %
                       </h2>
                       <h2>
                         Si ({itemsSeleccionados[1]}=0) Entonces{" "}
-                        {itemsSeleccionados[0]} = 1 Cb=20% Cf= 25%
+                        {itemsSeleccionados[0]} = 1 Cb={" "}
+                        <strong>
+                          {" "}
+                          {coberturaConfianzaValores.negativoPositivoItem1AHead[0].toFixed(
+                            2
+                          )}
+                        </strong>
+                        % Cf={" "}
+                        <strong>
+                          {coberturaConfianzaValores.negativoPositivoItem1AHead[1].toFixed(
+                            2
+                          )}
+                        </strong>
+                        %
                       </h2>
                       <h2>
                         Si ({itemsSeleccionados[1]}=0) Entonces{" "}
-                        {itemsSeleccionados[0]} = 0 Cb=20% Cf= 25%
+                        {itemsSeleccionados[0]} = 0 Cb={" "}
+                        <strong>
+                          {coberturaConfianzaValores.negativoNegativoItem1AHead[0].toFixed(
+                            2
+                          )}
+                        </strong>
+                        % Cf={" "}
+                        <strong>
+                          {coberturaConfianzaValores.negativoNegativoItem1AHead[1].toFixed(
+                            2
+                          )}
+                        </strong>
+                        %
                       </h2>
                       {/**Item dos a head */}
                       <h2>
                         Si ({itemsSeleccionados[0]}=1) Entonces{" "}
-                        {itemsSeleccionados[1]} = 1 Cb=20% Cf= 25%
+                        {itemsSeleccionados[1]} = 1 Cb={" "}
+                        <strong>
+                          {" "}
+                          {coberturaConfianzaValores.positivoPositivoItem2AHead[0].toFixed(
+                            2
+                          )}
+                        </strong>
+                        % Cf={" "}
+                        <strong>
+                          {coberturaConfianzaValores.positivoPositivoItem2AHead[1].toFixed(
+                            2
+                          )}
+                        </strong>
+                        %
                       </h2>
                       <h2>
                         Si ({itemsSeleccionados[0]}=1) Entonces{" "}
-                        {itemsSeleccionados[1]} = 0 Cb=20% Cf= 25%
+                        {itemsSeleccionados[1]} = 0 Cb={" "}
+                        <strong>
+                          {coberturaConfianzaValores.positivoNegativoItem2AHead[0].toFixed(
+                            2
+                          )}
+                        </strong>
+                        % Cf={" "}
+                        <strong>
+                          {coberturaConfianzaValores.positivoNegativoItem2AHead[1].toFixed(
+                            2
+                          )}
+                        </strong>
+                        %
                       </h2>
                       <h2>
                         Si ({itemsSeleccionados[0]}=0) Entonces{" "}
-                        {itemsSeleccionados[1]} = 1 Cb=20% Cf= 25%
+                        {itemsSeleccionados[1]} = 1 Cb={" "}
+                        <strong>
+                          {coberturaConfianzaValores.negativoPositivoItem2AHead[0].toFixed(
+                            2
+                          )}
+                        </strong>
+                        % Cf={" "}
+                        <strong>
+                          {coberturaConfianzaValores.negativoPositivoItem2AHead[1].toFixed(
+                            2
+                          )}
+                        </strong>
+                        %
                       </h2>
                       <h2>
                         Si ({itemsSeleccionados[0]}=0) Entonces{" "}
-                        {itemsSeleccionados[1]} = 0 Cb=20% Cf= 25%
+                        {itemsSeleccionados[1]} = 0 Cb={" "}
+                        <strong>
+                          {coberturaConfianzaValores.negativoNegativoItem2AHead[0].toFixed(
+                            2
+                          )}
+                        </strong>
+                        % Cf={" "}
+                        <strong>
+                          {coberturaConfianzaValores.negativoNegativoItem2AHead[1].toFixed(
+                            2
+                          )}
+                        </strong>
+                        %
                       </h2>
                     </div>
                   </div>
