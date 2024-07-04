@@ -76,6 +76,16 @@ const ReadExcelFile = () => {
       negativoNegativo: 0,
       negativoPositivo: 0,
     });
+  //*En este useState se almacenaran todos los valores del chi 2
+  const [chiCuadradoValores, setChiCuadradoValores] =
+    useState<FactorDeDependeciaDatos>({
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    });
+  //*En este se almacenara el valor de la suma del chi 2
+  const [chiCuadradoResultado, setChiCuadradoResultado] = useState<number>(0);
   //*Este use effect se utiliza para que cuando cambie el valor datosTablaContiugencia se compilen esas dos fuciones las cuales son la logica de todo el codigo
   useEffect(() => {
     //*Se llama la funcion de la tabla de contigencia para poder crear la misma
@@ -86,6 +96,7 @@ const ReadExcelFile = () => {
     //*Se llama la funcion coberturaConfianzaFn para poder determinar la cobertura y confianza de nuestra tabla de contigencia
     coberturaConfianzaFn();
     factorDeDependenciaFn();
+    chiCuadradoFn();
   }, [tablaDeContigencia]);
   //*leemos el excel con esta funcion
   const manejarCargaArchivo = (
@@ -209,7 +220,34 @@ const ReadExcelFile = () => {
       negativoPositivo: (negativoPositivo / (sumaFila2 * sumaColumna1)) * 100,
     });
   };
-  console.log(factorDeDependenciaValores);
+  //*Esta funcion calcula el chi 2 y da los valores en el useState
+  const chiCuadradoFn = (): void => {
+    const {
+      positivoPositivo,
+      positivoNegativo,
+      negativoPositivo,
+      negativoNegativo,
+    } = tablaDeContigencia;
+    //*Sumas de las filas y columnas
+    const sumaFila1 = positivoPositivo + positivoNegativo;
+    const sumaFila2 = negativoPositivo + negativoNegativo;
+    const sumaColumna1 = positivoPositivo + negativoPositivo;
+    const sumaColumna2 = positivoNegativo + negativoNegativo;
+
+    console.log(sumaFila1, sumaColumna1);
+    const ePP = (sumaFila1 * sumaColumna1) / 100;
+    const ePN = (sumaFila1 * sumaColumna2) / 100;
+    const eNP = (sumaFila2 * sumaColumna1) / 100;
+    const eNN = (sumaFila2 * sumaColumna2) / 100;
+
+    setChiCuadradoValores({
+      positivoPositivo: (positivoPositivo - ePP) ** 2 / ePP,
+      positivoNegativo: (positivoNegativo - ePN) ** 2 / ePN,
+      negativoPositivo: (negativoPositivo - eNP) ** 2 / eNP,
+      negativoNegativo: (negativoNegativo - eNN) ** 2 / eNN,
+    });
+  };
+  console.log(chiCuadradoValores);
   const handleSelectItemsSubmit = (): void => {
     if (isValid || itemsSeleccionados.length < 2) {
       toast.error("Solo puedes seleccionar DOS items");
@@ -340,7 +378,7 @@ const ReadExcelFile = () => {
                     </tbody>
                   </table>
                   <div className="my-5">
-                    <h1 className=" text-3xl font-thin">
+                    <h1 className=" text-3xl font-thin mb-5">
                       Cobertura y Confianza
                     </h1>
                     {/**Se imprimen los datos de la cobertura y la confianza */}
@@ -478,7 +516,7 @@ const ReadExcelFile = () => {
                         %
                       </h2>
                     </div>
-                    <h1 className="text-3xl font-thin mt-5">
+                    <h1 className="text-3xl font-thin my-5">
                       Factor de dependencia
                     </h1>
                     <table className="min-w-full bg-white border-gray-200 shadow-md rounded-lg overflow-hidden">
