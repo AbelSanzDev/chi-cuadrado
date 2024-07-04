@@ -28,6 +28,13 @@ interface CoberturaConfianzaDatos {
   negativoNegativoItem2AHead: number[];
   negativoPositivoItem2AHead: number[];
 }
+//*Interfaz de como seran los datos de la tabla factor de dependencia
+interface FactorDeDependeciaDatos {
+  positivoPositivo: number;
+  positivoNegativo: number;
+  negativoNegativo: number;
+  negativoPositivo: number;
+}
 const ReadExcelFile = () => {
   //*En este useState se alamcenan todos los datos de la hoja de excel que se quiere ver
   const [datosHoja, setDatosHoja] = useState<DatoHoja[]>([]); //* puede contener un arreglo de cualquier tipo de datos
@@ -61,6 +68,14 @@ const ReadExcelFile = () => {
       negativoPositivoItem2AHead: [0, 0],
       negativoNegativoItem2AHead: [0, 0],
     });
+  //*En este useState se alamacenaran los valores de depedencia esto se imprimira en una tabla
+  const [factorDeDependenciaValores, setFactorDeDependenciaValores] =
+    useState<FactorDeDependeciaDatos>({
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    });
   //*Este use effect se utiliza para que cuando cambie el valor datosTablaContiugencia se compilen esas dos fuciones las cuales son la logica de todo el codigo
   useEffect(() => {
     //*Se llama la funcion de la tabla de contigencia para poder crear la misma
@@ -70,6 +85,7 @@ const ReadExcelFile = () => {
   useEffect(() => {
     //*Se llama la funcion coberturaConfianzaFn para poder determinar la cobertura y confianza de nuestra tabla de contigencia
     coberturaConfianzaFn();
+    factorDeDependenciaFn();
   }, [tablaDeContigencia]);
   //*leemos el excel con esta funcion
   const manejarCargaArchivo = (
@@ -172,7 +188,28 @@ const ReadExcelFile = () => {
       ],
     });
   };
+  //*Esta funcion se encargara de calcular y generear el Factor de dependencia
+  const factorDeDependenciaFn = (): void => {
+    const {
+      positivoPositivo,
+      positivoNegativo,
+      negativoPositivo,
+      negativoNegativo,
+    } = tablaDeContigencia;
+    //*Sumas de las filas y columnas
+    const sumaFila1 = positivoPositivo + positivoNegativo;
+    const sumaFila2 = negativoPositivo + negativoNegativo;
+    const sumaColumna1 = positivoPositivo + negativoPositivo;
+    const sumaColumna2 = positivoNegativo + negativoNegativo;
 
+    setFactorDeDependenciaValores({
+      positivoPositivo: (positivoPositivo / (sumaFila1 * sumaColumna1)) * 100,
+      positivoNegativo: (positivoNegativo / (sumaFila1 * sumaColumna2)) * 100,
+      negativoNegativo: (negativoNegativo / (sumaFila2 * sumaColumna1)) * 100,
+      negativoPositivo: (negativoPositivo / (sumaFila2 * sumaColumna2)) * 100,
+    });
+  };
+  console.log(factorDeDependenciaValores);
   const handleSelectItemsSubmit = (): void => {
     if (isValid || itemsSeleccionados.length < 2) {
       toast.error("Solo puedes seleccionar DOS items");
