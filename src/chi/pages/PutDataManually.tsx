@@ -21,6 +21,16 @@ interface ItemArray {
   item7: ItemArrayFormat;
   item8: ItemArrayFormat;
 }
+interface ItemArrayObjetos {
+  item1?: ItemArrayFormat;
+  item2?: ItemArrayFormat;
+  item3?: ItemArrayFormat;
+  item4?: ItemArrayFormat;
+  item5?: ItemArrayFormat;
+  item6?: ItemArrayFormat;
+  item7?: ItemArrayFormat;
+  item8?: ItemArrayFormat;
+}
 //*Interfaz para darle el formato a los 8 items permitidos
 interface ItemsData {
   item1: ItemFormat;
@@ -58,6 +68,9 @@ const PutDataManually = () => {
     item7: { datosArray: [] },
     item8: { datosArray: [] },
   });
+  const [nuevosDatosUsados, setNuevosDatosUsados] = useState<ItemArrayObjetos>(
+    {}
+  );
   //*Este useEfffect es para poder cambiar el state en el caso de que algun item en el apartado nombre tiene valor de ser asi se activara la tabla
   useEffect(() => {
     if (
@@ -97,6 +110,16 @@ const PutDataManually = () => {
       item6: { nombre: "", datos: "" },
       item7: { nombre: "", datos: "" },
       item8: { nombre: "", datos: "" },
+    });
+    setdatosArray({
+      item1: { datosArray: [] },
+      item2: { datosArray: [] },
+      item3: { datosArray: [] },
+      item4: { datosArray: [] },
+      item5: { datosArray: [] },
+      item6: { datosArray: [] },
+      item7: { datosArray: [] },
+      item8: { datosArray: [] },
     });
   };
   const handleOnChangeItemValues = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -144,12 +167,79 @@ const PutDataManually = () => {
       toast.error("Solo se permiten los datos 1 o 0");
     }
   };
-  console.log(datosArray);
+
   //*Esta funcion convertira el string de los valores de las columnas a arreglo para iterarlo en la tabla en tiempo real
   const itemKeys = Object.keys(datosArray) as Array<keyof ItemArray>;
   const maxLength = Math.max(
     ...itemKeys.map((key) => datosArray[key].datosArray.length)
   );
+  //*Funcion para calcular todo
+  const handleGenerarCalculos = (): void => {
+    //*Destructuring para sacar el valor de los datos
+    const { datosArray: datos1 } = datosArray.item1;
+    const { datosArray: datos2 } = datosArray.item2;
+    const { datosArray: datos3 } = datosArray.item3;
+    const { datosArray: datos4 } = datosArray.item4;
+    const { datosArray: datos5 } = datosArray.item5;
+    const { datosArray: datos6 } = datosArray.item6;
+    const { datosArray: datos7 } = datosArray.item7;
+    const { datosArray: datos8 } = datosArray.item8;
+    //*Estas variables son para el tamaño de cada string y saber si son del mismo length
+    const dato1Length = datos1.length;
+    const dato2Length = datos2.length;
+    const dato3Length = datos3.length;
+    const dato4Length = datos4.length;
+    const dato5Length = datos5.length;
+    const dato6Length = datos6.length;
+    const dato7Length = datos7.length;
+    const dato8Length = datos8.length;
+    //*Arreglo de length del arreglo principal
+    const allLength = [
+      dato1Length,
+      dato2Length,
+      dato3Length,
+      dato4Length,
+      dato5Length,
+      dato6Length,
+      dato7Length,
+      dato8Length,
+    ];
+    //*Crear el nuevo arreglo solo de los datos que se van a utilizar
+    let arregloDeObjetos: ItemArrayObjetos;
+    let nuevoArrayConDatosSeleccionados: number[] = []; //*Almacena los datos que se estan utilizando
+    allLength.forEach((seleccionado) => {
+      if (seleccionado > 0) {
+        nuevoArrayConDatosSeleccionados.push(seleccionado);
+      }
+    });
+    //*En este forEach saco el valor maximo del arreglo,length
+    let maximoLength: number = 0;
+    nuevoArrayConDatosSeleccionados.forEach((max) => {
+      if (max > maximoLength) {
+        maximoLength = max;
+      }
+    });
+
+    //*El every valida si todos son igual a una dato en caso al dato1Length
+    const allEqual = nuevoArrayConDatosSeleccionados.every(
+      (length) => length === maximoLength
+    );
+    //*Este if es para cuando el maximoLength sea igual a 0 no se puede acceder a la logica
+    if (maximoLength === 0) {
+      toast.error(`Debes de tener datos en almenos dos columnas`);
+      return;
+    }
+
+    if (!allEqual) {
+      toast.error(
+        `El tamaño de la columna debe de ser igual a la columna "${items.item1.nombre}"`
+      );
+      return;
+    }
+    //*Logica de calculos
+  };
+  //*Esta funcion sirve para hacer un arreglo de objetos para el array de items
+  const arregloObjetos = (): void => {};
 
   return (
     <>
@@ -237,7 +327,6 @@ const PutDataManually = () => {
                 size="lg"
                 content="Para poner los datos se tienen que separar por espacios, por ejemplo: 1 0 1 0 1 0 0 1 0 1 0 1 0 0 1 0"
                 className="w-[20rem] font-bold text-xl"
-                color="warning"
               >
                 <div className="w-10">
                   <svg
@@ -355,6 +444,17 @@ const PutDataManually = () => {
               />
             )}
           </div>
+          <div className="mt-5">
+            <Button
+              onClick={() => {
+                handleGenerarCalculos();
+              }}
+              color="primary"
+              size="lg"
+            >
+              Generear Calculos
+            </Button>
+          </div>
         </div>
         {/**En esta parte se mostraran los datos en una tabla */}
         <div className="mt-5">
@@ -363,8 +463,8 @@ const PutDataManually = () => {
               <h1 className="mb-5 font-thin text-3xl">Datos</h1>
               <table className="min-w-full bg-white border-gray-200 shadow-md rounded-lg overflow-hidden">
                 <thead className="bg-gray-100">
-                  <tr>
-                    <th className="border-b-2 border-gray-300 py-2 px-4 text-left text-sm font-semibold text-gray-700">
+                  <tr className="">
+                    <th className="border-b-2  border-gray-300 py-2 px-4 text-left text-sm font-semibold text-gray-700">
                       {items.item1.nombre}
                     </th>
                     <th className="border-b-2 border-gray-300 py-2 px-4 text-left text-sm font-semibold text-gray-700">
@@ -395,7 +495,11 @@ const PutDataManually = () => {
                   {[...Array(maxLength)].map((_, rowIndex) => (
                     <tr key={rowIndex}>
                       {itemKeys.map((key, colIndex) => (
-                        <td key={colIndex} className="border border-slate-300">
+                        //*En caso de que una columna no tenga datos los va a dejar como vacios
+                        <td
+                          key={colIndex}
+                          className="border border-slate-300 text-center"
+                        >
                           {datosArray[key].datosArray[rowIndex] !== undefined
                             ? datosArray[key].datosArray[rowIndex]
                             : ""}
