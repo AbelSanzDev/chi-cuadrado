@@ -7,6 +7,20 @@ interface ItemFormat {
   nombre: string;
   datos: string;
 }
+//*Interfaz para el formato del array de los valores
+interface ItemArrayFormat {
+  datosArray: number[];
+}
+interface ItemArray {
+  item1: ItemArrayFormat;
+  item2: ItemArrayFormat;
+  item3: ItemArrayFormat;
+  item4: ItemArrayFormat;
+  item5: ItemArrayFormat;
+  item6: ItemArrayFormat;
+  item7: ItemArrayFormat;
+  item8: ItemArrayFormat;
+}
 //*Interfaz para darle el formato a los 8 items permitidos
 interface ItemsData {
   item1: ItemFormat;
@@ -33,6 +47,17 @@ const PutDataManually = () => {
   });
   //*Este estado es para poder saber si items tiene valores
   const [state, setState] = useState<boolean>(false);
+  //*Este useState es para almacenar el valor de items.item#.datos en un arreglo
+  const [datosArray, setdatosArray] = useState<ItemArray>({
+    item1: { datosArray: [] },
+    item2: { datosArray: [] },
+    item3: { datosArray: [] },
+    item4: { datosArray: [] },
+    item5: { datosArray: [] },
+    item6: { datosArray: [] },
+    item7: { datosArray: [] },
+    item8: { datosArray: [] },
+  });
   //*Este useEfffect es para poder cambiar el state en el caso de que algun item en el apartado nombre tiene valor de ser asi se activara la tabla
   useEffect(() => {
     if (
@@ -61,6 +86,7 @@ const PutDataManually = () => {
       },
     }));
   };
+  //*Funcion para limiar toda la data
   const clearData = (): void => {
     setItems({
       item1: { nombre: "", datos: "" },
@@ -102,10 +128,29 @@ const PutDataManually = () => {
           datos: value,
         },
       }));
+      //*En esta parte se almacena el array del string ingresado por el usuario
+      setdatosArray((prevItems) => ({
+        ...prevItems,
+        [name]: {
+          ...prevItems[name as keyof ItemsData],
+          //*El array se crea con split cada que el string tenga un espacio en " " va a hacer otro elemento para el array
+          datosArray: value
+            .split(" ")
+            .filter((elemento) => elemento !== "")
+            .map(Number),
+        },
+      }));
     } else {
       toast.error("Solo se permiten los datos 1 o 0");
     }
   };
+  console.log(datosArray);
+  //*Esta funcion convertira el string de los valores de las columnas a arreglo para iterarlo en la tabla en tiempo real
+  const itemKeys = Object.keys(datosArray) as Array<keyof ItemArray>;
+  const maxLength = Math.max(
+    ...itemKeys.map((key) => datosArray[key].datosArray.length)
+  );
+
   return (
     <>
       <div className="container mx-auto grid grid-cols-2 gap-5 ">
@@ -200,7 +245,7 @@ const PutDataManually = () => {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
                     <g
                       id="SVGRepo_tracerCarrier"
                       strokeLinecap="round"
@@ -345,6 +390,20 @@ const PutDataManually = () => {
                     </th>
                   </tr>
                 </thead>
+                <tbody>
+                  {/**[...Array(maxLength)] esta parte utiliza ... para convertirlo en un array osea el mexLengh lo convierte en una lista de elementos */}
+                  {[...Array(maxLength)].map((_, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {itemKeys.map((key, colIndex) => (
+                        <td key={colIndex} className="border border-slate-300">
+                          {datosArray[key].datosArray[rowIndex] !== undefined
+                            ? datosArray[key].datosArray[rowIndex]
+                            : ""}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </>
           )}
