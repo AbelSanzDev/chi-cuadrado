@@ -2,6 +2,10 @@ import { Button, Input, Tooltip } from "@nextui-org/react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
+//*Interfaz de los datos que puede recibir los datos transformados, puede recibir un objeto d llave tipo string con datos tipo string | number | boolean | null;
+interface DatoHoja {
+  [key: string]: string | number | boolean | null;
+}
 //*Iterfaz de como tiene que ser los datos de cada item
 interface ItemFormat {
   nombre: string;
@@ -71,6 +75,8 @@ const PutDataManually = () => {
   const [nuevosDatosUsados, setNuevosDatosUsados] = useState<ItemArrayObjetos>(
     {}
   );
+  //*En este useState se alamcenan todos los datos transformados que se quieren ver
+  const [datosHoja, setDatosHoja] = useState<DatoHoja[]>([]); //* puede contener un arreglo de cualquier tipo de datos
   //*Este useEfffect es para poder cambiar el state en el caso de que algun item en el apartado nombre tiene valor de ser asi se activara la tabla
   useEffect(() => {
     if (
@@ -88,6 +94,10 @@ const PutDataManually = () => {
       setState(false);
     }
   }, [items]);
+  //*Este useEffect es para cuando cambien los nuevosDatosUsados y asi poder compilar la funcion arregloObjetos
+  useEffect(() => {
+    arregloObjetos();
+  }, [nuevosDatosUsados]);
   //*Esta funcion es para almacenar el valor nombre de los items
   const handleOnChangeItem = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -205,13 +215,14 @@ const PutDataManually = () => {
       dato8Length,
     ];
     //*Crear el nuevo arreglo solo de los datos que se van a utilizar
-    let arregloDeObjetos: ItemArrayObjetos;
+
     let nuevoArrayConDatosSeleccionados: number[] = []; //*Almacena los datos que se estan utilizando
     allLength.forEach((seleccionado) => {
       if (seleccionado > 0) {
         nuevoArrayConDatosSeleccionados.push(seleccionado);
       }
     });
+    console.log(allLength);
     //*En este forEach saco el valor maximo del arreglo,length
     let maximoLength: number = 0;
     nuevoArrayConDatosSeleccionados.forEach((max) => {
@@ -236,10 +247,107 @@ const PutDataManually = () => {
       );
       return;
     }
+    //*Objetos que tienen valores
+    let objetosConDatos: ItemArrayObjetos = {};
+
+    if (dato1Length > 0) {
+      objetosConDatos.item1 = { datosArray: datos1 };
+    }
+    if (dato2Length > 0) {
+      objetosConDatos.item2 = { datosArray: datos2 };
+    }
+    if (dato3Length > 0) {
+      objetosConDatos.item3 = { datosArray: datos3 };
+    }
+    if (dato4Length > 0) {
+      objetosConDatos.item4 = { datosArray: datos4 };
+    }
+    if (dato5Length > 0) {
+      objetosConDatos.item5 = { datosArray: datos5 };
+    }
+    if (dato6Length > 0) {
+      objetosConDatos.item6 = { datosArray: datos6 };
+    }
+    if (dato7Length > 0) {
+      objetosConDatos.item7 = { datosArray: datos7 };
+    }
+    if (dato8Length > 0) {
+      objetosConDatos.item8 = { datosArray: datos8 };
+    }
+    setNuevosDatosUsados(objetosConDatos);
     //*Logica de calculos
   };
+  // console.log(nuevosDatosUsados);
+
   //*Esta funcion sirve para hacer un arreglo de objetos para el array de items
-  const arregloObjetos = (): void => {};
+  const arregloObjetos = (): void => {
+    let nuevoFormato: DatoHoja[] = [];
+
+    //* Sacar el máximo tamaño de datosArray
+    const maxLength = Math.max(
+      ...Object.values(nuevosDatosUsados).map(
+        (item) => item?.datosArray?.length || 0
+      )
+    );
+
+    //*Este for sirve para la transformacion del nuevo arreglo de objetos
+    for (let i = 0; i < maxLength; i++) {
+      let nuevoObjeto: DatoHoja = {};
+
+      if (
+        nuevosDatosUsados.item1?.datosArray &&
+        nuevosDatosUsados.item1.datosArray[i] !== undefined
+      ) {
+        nuevoObjeto[items.item1.nombre] = nuevosDatosUsados.item1.datosArray[i];
+      }
+      if (
+        nuevosDatosUsados.item2?.datosArray &&
+        nuevosDatosUsados.item2.datosArray[i] !== undefined
+      ) {
+        nuevoObjeto[items.item2.nombre] = nuevosDatosUsados.item2.datosArray[i];
+      }
+      if (
+        nuevosDatosUsados.item3?.datosArray &&
+        nuevosDatosUsados.item3.datosArray[i] !== undefined
+      ) {
+        nuevoObjeto[items.item3.nombre] = nuevosDatosUsados.item3.datosArray[i];
+      }
+      if (
+        nuevosDatosUsados.item4?.datosArray &&
+        nuevosDatosUsados.item4.datosArray[i] !== undefined
+      ) {
+        nuevoObjeto[items.item4.nombre] = nuevosDatosUsados.item4.datosArray[i];
+      }
+      if (
+        nuevosDatosUsados.item5?.datosArray &&
+        nuevosDatosUsados.item5.datosArray[i] !== undefined
+      ) {
+        nuevoObjeto[items.item5.nombre] = nuevosDatosUsados.item5.datosArray[i];
+      }
+      if (
+        nuevosDatosUsados.item6?.datosArray &&
+        nuevosDatosUsados.item6.datosArray[i] !== undefined
+      ) {
+        nuevoObjeto[items.item6.nombre] = nuevosDatosUsados.item6.datosArray[i];
+      }
+      if (
+        nuevosDatosUsados.item7?.datosArray &&
+        nuevosDatosUsados.item7.datosArray[i] !== undefined
+      ) {
+        nuevoObjeto[items.item7.nombre] = nuevosDatosUsados.item7.datosArray[i];
+      }
+      if (
+        nuevosDatosUsados.item8?.datosArray &&
+        nuevosDatosUsados.item8.datosArray[i] !== undefined
+      ) {
+        nuevoObjeto[items.item8.nombre] = nuevosDatosUsados.item8.datosArray[i];
+      }
+
+      nuevoFormato.push(nuevoObjeto);
+    }
+
+    setDatosHoja(nuevoFormato);
+  };
 
   return (
     <>
