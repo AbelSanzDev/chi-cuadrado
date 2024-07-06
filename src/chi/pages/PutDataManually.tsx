@@ -7,10 +7,14 @@ import {
   RadioGroup,
   Tooltip,
 } from "@nextui-org/react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { chiSquareTable } from "../helpers/chiCuadradoDatosTabla";
 
+//*Esta interfaz es para que los eventos puedan recibir tanto como un changeEven asi como un objeto que sea igual a este junto con su tipado { target: { name: string; value: string } }
+type ChangeEventOrObject =
+  | ChangeEvent<HTMLInputElement>
+  | { target: { name: string; value: string } };
 //*Interfaz de los datos que puede recibir los datos transformados, puede recibir un objeto d llave tipo string con datos tipo string | number | boolean | null;
 interface DatoHoja {
   [key: string]: string | number | boolean | null;
@@ -84,6 +88,7 @@ interface FactorDeDependeciaDatos {
 }
 
 const PutDataManually = () => {
+  const inputRef1 = useRef<HTMLInputElement>(null);
   //*Este useState se va a utilizar para poder almacenar el nombre y los dato binarios de los items
   const [items, setItems] = useState({
     item1: { nombre: "", datos: "" },
@@ -219,6 +224,9 @@ const PutDataManually = () => {
       item7: { nombre: "", datos: "" },
       item8: { nombre: "", datos: "" },
     });
+
+    setState(false);
+
     setdatosArray({
       item1: { datosArray: [] },
       item2: { datosArray: [] },
@@ -229,8 +237,52 @@ const PutDataManually = () => {
       item7: { datosArray: [] },
       item8: { datosArray: [] },
     });
+
+    setNuevosDatosUsados({});
+
+    setDatosHoja([]);
+
+    setIsValid(false);
+
+    setItemsSeleccionados([]);
+
+    setDatosTablaContigencia([]);
+
+    setTablaDeContigencia({
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    });
+
+    setCoberturaConfianzaValores({
+      positivoPositivoItem1AHead: [0, 0],
+      positivoNegativoItem1AHead: [0, 0],
+      negativoPositivoItem1AHead: [0, 0],
+      negativoNegativoItem1AHead: [0, 0],
+      positivoPositivoItem2AHead: [0, 0],
+      positivoNegativoItem2AHead: [0, 0],
+      negativoPositivoItem2AHead: [0, 0],
+      negativoNegativoItem2AHead: [0, 0],
+    });
+
+    setFactorDeDependenciaValores({
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    });
+
+    setChiCuadradoValores({
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    });
+
+    setConfianza(chiSquareTable[0].confianza[0]);
   };
-  const handleOnChangeItemValues = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handleOnChangeItemValues = (e: ChangeEventOrObject): void => {
     const { name, value } = e.target;
     const lon = value.length;
     let insideState: boolean = true;
@@ -320,7 +372,7 @@ const PutDataManually = () => {
         nuevoArrayConDatosSeleccionados.push(seleccionado);
       }
     });
-    console.log(allLength);
+
     //*En este forEach saco el valor maximo del arreglo,length
     let maximoLength: number = 0;
     nuevoArrayConDatosSeleccionados.forEach((max) => {
@@ -581,6 +633,110 @@ const PutDataManually = () => {
     const valor = parseInt(e);
     setConfianza(chiSquareTable[0].confianza[valor]);
   };
+  //*Esta funcion sirve para el llenado de datos aleatorios
+  const handleLlenadoDeDatosAleatorios = (id: number): void => {
+    let dato = "";
+    switch (id) {
+      case 1:
+        for (let i = 0; i < 200; i++) {
+          if (i % 2 === 0) {
+            dato += " ";
+          } else {
+            dato += Math.random() >= 0.5 ? "1" : "0";
+          }
+        }
+        //*Se llama la funcion para poder genera el  evento y poder poner todos los datos en tiempo real en la tabla y asi mismo que se conviertan a arreglo
+        handleOnChangeItemValues({ target: { name: "item1", value: dato } });
+
+        break;
+      case 2:
+        for (let i = 0; i < 200; i++) {
+          if (i % 2 === 0) {
+            dato += " ";
+          } else {
+            dato += Math.random() >= 0.5 ? "1" : "0";
+          }
+        }
+        //*Se llama la funcion para poder genera el  evento y poder poner todos los datos en tiempo real en la tabla y asi mismo que se conviertan a arreglo
+        handleOnChangeItemValues({ target: { name: "item2", value: dato } });
+
+        break;
+      case 3:
+        for (let i = 0; i < 200; i++) {
+          if (i % 2 === 0) {
+            dato += " ";
+          } else {
+            dato += Math.random() >= 0.5 ? "1" : "0";
+          }
+        }
+        //*Se llama la funcion para poder genera el  evento y poder poner todos los datos en tiempo real en la tabla y asi mismo que se conviertan a arreglo
+        handleOnChangeItemValues({ target: { name: "item3", value: dato } });
+
+        break;
+      case 4:
+        for (let i = 0; i < 200; i++) {
+          if (i % 2 === 0) {
+            dato += " ";
+          } else {
+            dato += Math.random() >= 0.5 ? "1" : "0";
+          }
+        }
+        //*Se llama la funcion para poder genera el  evento y poder poner todos los datos en tiempo real en la tabla y asi mismo que se conviertan a arreglo
+        handleOnChangeItemValues({ target: { name: "item4", value: dato } });
+
+        break;
+      case 5:
+        for (let i = 0; i < 200; i++) {
+          if (i % 2 === 0) {
+            dato += " ";
+          } else {
+            dato += Math.random() >= 0.5 ? "1" : "0";
+          }
+        }
+        //*Se llama la funcion para poder genera el  evento y poder poner todos los datos en tiempo real en la tabla y asi mismo que se conviertan a arreglo
+        handleOnChangeItemValues({ target: { name: "item5", value: dato } });
+
+        break;
+      case 6:
+        for (let i = 0; i < 200; i++) {
+          if (i % 2 === 0) {
+            dato += " ";
+          } else {
+            dato += Math.random() >= 0.5 ? "1" : "0";
+          }
+        }
+        //*Se llama la funcion para poder genera el  evento y poder poner todos los datos en tiempo real en la tabla y asi mismo que se conviertan a arreglo
+        handleOnChangeItemValues({ target: { name: "item6", value: dato } });
+
+        break;
+      case 7:
+        for (let i = 0; i < 200; i++) {
+          if (i % 2 === 0) {
+            dato += " ";
+          } else {
+            dato += Math.random() >= 0.5 ? "1" : "0";
+          }
+        }
+        //*Se llama la funcion para poder genera el  evento y poder poner todos los datos en tiempo real en la tabla y asi mismo que se conviertan a arreglo
+        handleOnChangeItemValues({ target: { name: "item7", value: dato } });
+
+        break;
+      case 8:
+        for (let i = 0; i < 200; i++) {
+          if (i % 2 === 0) {
+            dato += " ";
+          } else {
+            dato += Math.random() >= 0.5 ? "1" : "0";
+          }
+        }
+        //*Se llama la funcion para poder genera el  evento y poder poner todos los datos en tiempo real en la tabla y asi mismo que se conviertan a arreglo
+        handleOnChangeItemValues({ target: { name: "item8", value: dato } });
+
+        break;
+      default:
+        break;
+    }
+  };
   const handleSelectItemsSubmit = (): void => {
     if (isValid || itemsSeleccionados.length < 2) {
       toast.error("Solo puedes seleccionar DOS items");
@@ -714,90 +870,171 @@ const PutDataManually = () => {
             </div>
 
             {items.item1.nombre && (
-              <Input
-                name="item1"
-                onChange={(e) => handleOnChangeItemValues(e)}
-                type="text"
-                value={items.item1.datos}
-                variant={"underlined"}
-                label="Datos de Item1 "
-              />
+              <div className=" flex gap-1 items-center">
+                <Input
+                  ref={inputRef1}
+                  name="item1"
+                  onChange={(e) => handleOnChangeItemValues(e)}
+                  type="text"
+                  value={items.item1.datos}
+                  variant={"underlined"}
+                  label="Datos de Item1 "
+                />
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    handleLlenadoDeDatosAleatorios(1);
+                  }}
+                >
+                  Random
+                </Button>
+              </div>
             )}
             {items.item2.nombre && (
-              <Input
-                name="item2"
-                onChange={(e) => handleOnChangeItemValues(e)}
-                type="text"
-                value={items.item2.datos}
-                variant={"underlined"}
-                label="Datos de Item2"
-              />
+              <div className=" flex gap-1 items-center">
+                <Input
+                  name="item2"
+                  onChange={(e) => handleOnChangeItemValues(e)}
+                  type="text"
+                  value={items.item2.datos}
+                  variant={"underlined"}
+                  label="Datos de Item2"
+                />
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    handleLlenadoDeDatosAleatorios(2);
+                  }}
+                >
+                  Random
+                </Button>
+              </div>
             )}
 
             {items.item3.nombre && (
-              <Input
-                name="item3"
-                onChange={(e) => handleOnChangeItemValues(e)}
-                type="text"
-                value={items.item3.datos}
-                variant={"underlined"}
-                label="Datos de Item3"
-              />
+              <div className="flex gap-1 items-center">
+                <Input
+                  name="item3"
+                  onChange={(e) => handleOnChangeItemValues(e)}
+                  type="text"
+                  value={items.item3.datos}
+                  variant={"underlined"}
+                  label="Datos de Item3"
+                />
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    handleLlenadoDeDatosAleatorios(3);
+                  }}
+                >
+                  Random
+                </Button>
+              </div>
             )}
 
             {items.item4.nombre && (
-              <Input
-                name="item4"
-                onChange={(e) => handleOnChangeItemValues(e)}
-                type="text"
-                value={items.item4.datos}
-                variant={"underlined"}
-                label="Datos de Item4"
-              />
+              <div className="flex gap-1 items-center">
+                <Input
+                  name="item4"
+                  onChange={(e) => handleOnChangeItemValues(e)}
+                  type="text"
+                  value={items.item4.datos}
+                  variant={"underlined"}
+                  label="Datos de Item4"
+                />
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    handleLlenadoDeDatosAleatorios(4);
+                  }}
+                >
+                  Random
+                </Button>
+              </div>
             )}
 
             {items.item5.nombre && (
-              <Input
-                name="item5"
-                onChange={(e) => handleOnChangeItemValues(e)}
-                type="text"
-                value={items.item5.datos}
-                variant={"underlined"}
-                label="Datos de Item5"
-              />
+              <div className="flex gap-1 items-center">
+                <Input
+                  name="item5"
+                  onChange={(e) => handleOnChangeItemValues(e)}
+                  type="text"
+                  value={items.item5.datos}
+                  variant={"underlined"}
+                  label="Datos de Item5"
+                />
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    handleLlenadoDeDatosAleatorios(5);
+                  }}
+                >
+                  Random
+                </Button>
+              </div>
             )}
 
             {items.item6.nombre && (
-              <Input
-                name="item6"
-                onChange={(e) => handleOnChangeItemValues(e)}
-                type="text"
-                value={items.item6.datos}
-                variant={"underlined"}
-                label="Datos de Item6"
-              />
+              <div className="flex gap-1 items-center">
+                <Input
+                  name="item6"
+                  onChange={(e) => handleOnChangeItemValues(e)}
+                  type="text"
+                  value={items.item6.datos}
+                  variant={"underlined"}
+                  label="Datos de Item6"
+                />
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    handleLlenadoDeDatosAleatorios(6);
+                  }}
+                >
+                  Random
+                </Button>
+              </div>
             )}
 
             {items.item7.nombre && (
-              <Input
-                name="item7"
-                onChange={(e) => handleOnChangeItemValues(e)}
-                type="text"
-                value={items.item7.datos}
-                variant={"underlined"}
-                label="Datos de Item7"
-              />
+              <div className="flex gap-1 items-center">
+                <Input
+                  name="item7"
+                  onChange={(e) => handleOnChangeItemValues(e)}
+                  type="text"
+                  value={items.item7.datos}
+                  variant={"underlined"}
+                  label="Datos de Item7"
+                />
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    handleLlenadoDeDatosAleatorios(7);
+                  }}
+                >
+                  Random
+                </Button>
+              </div>
             )}
 
             {items.item8.nombre && (
-              <Input
-                name="item8"
-                onChange={(e) => handleOnChangeItemValues(e)}
-                type="text"
-                value={items.item8.datos}
-                variant={"underlined"}
-                label="Datos de Item8"
-              />
+              <div className="flex gap-1 items-center">
+                <Input
+                  name="item8"
+                  onChange={(e) => handleOnChangeItemValues(e)}
+                  type="text"
+                  value={items.item8.datos}
+                  variant={"underlined"}
+                  label="Datos de Item8"
+                />
+                <Button
+                  color="primary"
+                  onClick={() => {
+                    handleLlenadoDeDatosAleatorios(8);
+                  }}
+                >
+                  Random
+                </Button>
+              </div>
             )}
           </div>
           <div className="mt-5">

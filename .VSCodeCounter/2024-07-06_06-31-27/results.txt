@@ -1,0 +1,41 @@
+Date : 2024-07-06 06:31:27
+Directory : c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src
+Total : 10 files,  1097 codes, 949 comments, 31 blanks, all 2077 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| TypeScript JSX |          7 |      1,078 |        948 |         28 |      2,054 |
+| CSS            |          1 |         12 |          0 |          2 |         14 |
+| TypeScript     |          2 |          7 |          1 |          1 |          9 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                               | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                  |         10 |      1,097 |        949 |         31 |      2,077 |
+| . (Files)                                                                                          |          4 |         43 |          1 |          8 |         52 |
+| chi                                                                                                |          6 |      1,054 |        948 |         23 |      2,025 |
+| chi\components                                                                                     |          2 |         39 |          0 |          6 |         45 |
+| chi\helpers                                                                                        |          1 |          7 |          0 |          0 |          7 |
+| chi\pages                                                                                          |          3 |      1,008 |        948 |         17 |      1,973 |
++----------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                                                           | language       | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\App.tsx                                 | TypeScript JSX |         16 |          0 |          3 |         19 |
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\chi\components\MostrarTablaConDatos.tsx | TypeScript JSX |         33 |          0 |          3 |         36 |
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\chi\components\TablaDeContigencia.tsx   | TypeScript JSX |          6 |          0 |          3 |          9 |
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\chi\helpers\chiCuadradoDatosTabla.ts    | TypeScript     |          7 |          0 |          0 |          7 |
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\chi\pages\HomePage.tsx                  | TypeScript JSX |         20 |          0 |          3 |         23 |
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\chi\pages\PutDataManually.tsx           | TypeScript JSX |        665 |        594 |         11 |      1,270 |
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\chi\pages\ReadExcelFile.tsx             | TypeScript JSX |        323 |        354 |          3 |        680 |
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\index.css                               | CSS            |         12 |          0 |          2 |         14 |
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\main.tsx                                | TypeScript JSX |         15 |          0 |          2 |         17 |
+| c:\Users\abels\OneDrive\Escritorio\proyecto-2-equipo-2\src\vite-env.d.ts                           | TypeScript     |          0 |          1 |          1 |          2 |
+| Total                                                                                              |                |      1,097 |        949 |         31 |      2,077 |
++----------------------------------------------------------------------------------------------------+----------------+------------+------------+------------+------------+

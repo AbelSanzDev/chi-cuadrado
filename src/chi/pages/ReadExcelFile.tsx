@@ -275,9 +275,58 @@ const ReadExcelFile = () => {
     //*Los nuevos datos fitrados osea los dos items
     setDatosTablaContigencia(nuevosDatosFiltrados);
   };
+  //*Funcion para limiar toda la data
+  const clearData = (): void => {
+    setDatosHoja([]);
+
+    setIsValid(false);
+
+    setItemsSeleccionados([]);
+
+    setDatosTablaContigencia([]);
+
+    setTablaDeContigencia({
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    });
+
+    setCoberturaConfianzaValores({
+      positivoPositivoItem1AHead: [0, 0],
+      positivoNegativoItem1AHead: [0, 0],
+      negativoPositivoItem1AHead: [0, 0],
+      negativoNegativoItem1AHead: [0, 0],
+      positivoPositivoItem2AHead: [0, 0],
+      positivoNegativoItem2AHead: [0, 0],
+      negativoPositivoItem2AHead: [0, 0],
+      negativoNegativoItem2AHead: [0, 0],
+    });
+
+    setFactorDeDependenciaValores({
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    });
+
+    setChiCuadradoValores({
+      positivoPositivo: 0,
+      positivoNegativo: 0,
+      negativoNegativo: 0,
+      negativoPositivo: 0,
+    });
+
+    setConfianza(chiSquareTable[0].confianza[0]);
+  };
 
   return (
     <div className=" container mx-auto">
+      <div className="my-5 fixed top-1 left-6">
+        <Button color="danger" size="lg" onClick={clearData}>
+          Reset
+        </Button>
+      </div>
       <div className="grid grid-cols-2 gap-5">
         <div className="mt-5">
           <div className="mt-1 flex items-center justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
