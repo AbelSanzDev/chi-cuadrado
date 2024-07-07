@@ -110,23 +110,27 @@ const ReadExcelFile = () => {
   const manejarCargaArchivo = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    const archivo = e.target.files?.[0]; //*seleccionamos solo un archivo en este caso el primero
-    if (!archivo) return;
-    const lector = new FileReader();
-
-    lector.onload = (evento: ProgressEvent<FileReader>): void => {
-      const datos = evento.target?.result;
-      if (!datos) return;
-      const workbook = XLSX.read(datos, { type: "binary" });
-      workbook.SheetNames.forEach((nombreHoja) => {
-        const hoja = workbook.Sheets[nombreHoja];
-        const datosHoja: any = XLSX.utils.sheet_to_json(hoja);
-
-        setDatosHoja(datosHoja);
-      });
+    const file = e.target.files?.[0];
+    if (file) {
+      const fileType = file.name.split(".").pop()?.toLowerCase();
+      if (fileType === "xlsx" || fileType === "xls") {
+        readExcelFile(file);
+      } else {
+        alert("Unsupported file type");
+      }
+    }
+  };
+  const readExcelFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const binaryStr = e.target?.result as string;
+      const workbook = XLSX.read(binaryStr, { type: "binary" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const parsedData = XLSX.utils.sheet_to_json<DatoHoja>(sheet);
+      setDatosHoja(parsedData);
     };
-
-    lector.readAsBinaryString(archivo);
+    reader.readAsBinaryString(file);
   };
   //*esta funcion es para poder hacer la tabla de contigencia
   const handleItemsSelected = (e: string[]): void => {
