@@ -174,39 +174,43 @@ const ReadExcelFile = () => {
       negativoPositivo,
       negativoNegativo,
     } = tablaDeContigencia;
+    //*Suma del total de filas con valores
+    const sumaGeneral =
+      positivoPositivo + positivoNegativo + negativoPositivo + negativoNegativo;
+
     //*Calculos de cobertura y confianza
     setCoberturaConfianzaValores({
       positivoPositivoItem1AHead: [
-        positivoPositivo,
+        (positivoPositivo / sumaGeneral) * 100,
         (positivoPositivo / (positivoPositivo + positivoNegativo)) * 100,
       ],
       positivoNegativoItem1AHead: [
-        positivoNegativo,
+        (positivoNegativo / sumaGeneral) * 100,
         (positivoNegativo / (positivoPositivo + positivoNegativo)) * 100,
       ],
       negativoPositivoItem1AHead: [
-        negativoPositivo,
+        (negativoPositivo / sumaGeneral) * 100,
         (negativoPositivo / (negativoPositivo + negativoNegativo)) * 100,
       ],
       negativoNegativoItem1AHead: [
-        negativoNegativo,
+        (negativoNegativo / sumaGeneral) * 100,
         (negativoNegativo / (negativoPositivo + negativoNegativo)) * 100,
       ],
       //*Cuando se comienza con el item 2
       positivoPositivoItem2AHead: [
-        positivoPositivo,
+        (positivoPositivo / sumaGeneral) * 100,
         (positivoPositivo / (positivoPositivo + negativoPositivo)) * 100,
       ],
       positivoNegativoItem2AHead: [
-        negativoPositivo, //*Es negativoPositivo porque es en base a las coordenadas
+        (negativoPositivo / sumaGeneral) * 100, //*Es negativoPositivo porque es en base a las coordenadas
         (negativoPositivo / (positivoPositivo + negativoPositivo)) * 100,
       ],
       negativoPositivoItem2AHead: [
-        positivoNegativo, //*Es positivoNegativo porque es en base a las coordenadas
+        (positivoNegativo / sumaGeneral) * 100, //*Es positivoNegativo porque es en base a las coordenadas
         (positivoNegativo / (positivoNegativo + negativoNegativo)) * 100,
       ],
       negativoNegativoItem2AHead: [
-        negativoNegativo,
+        (negativoNegativo / sumaGeneral) * 100,
         (negativoNegativo / (positivoNegativo + negativoNegativo)) * 100,
       ],
     });
@@ -219,17 +223,49 @@ const ReadExcelFile = () => {
       negativoPositivo,
       negativoNegativo,
     } = tablaDeContigencia;
-    //*Sumas de las filas y columnas
+
+    // Sumas de las filas y columnas
     const sumaFila1 = positivoPositivo + positivoNegativo;
     const sumaFila2 = negativoPositivo + negativoNegativo;
     const sumaColumna1 = positivoPositivo + negativoPositivo;
     const sumaColumna2 = positivoNegativo + negativoNegativo;
+    const sumaGeneral = sumaFila1 + sumaFila2; // Suma total de todos los valores
+
+    // Cálculo de los factores de dependencia
+    const factorDependenciaPositivoPositivo =
+      ((positivoPositivo /
+        sumaGeneral /
+        (sumaFila1 / sumaGeneral) /
+        (sumaColumna1 / sumaGeneral)) *
+        100) /
+      100;
+    const factorDependenciaPositivoNegativo =
+      ((positivoNegativo /
+        sumaGeneral /
+        (sumaFila1 / sumaGeneral) /
+        (sumaColumna2 / sumaGeneral)) *
+        100) /
+      100;
+    const factorDependenciaNegativoPositivo =
+      ((negativoPositivo /
+        sumaGeneral /
+        (sumaFila2 / sumaGeneral) /
+        (sumaColumna1 / sumaGeneral)) *
+        100) /
+      100;
+    const factorDependenciaNegativoNegativo =
+      ((negativoNegativo /
+        sumaGeneral /
+        (sumaFila2 / sumaGeneral) /
+        (sumaColumna2 / sumaGeneral)) *
+        100) /
+      100;
 
     setFactorDeDependenciaValores({
-      positivoPositivo: (positivoPositivo / (sumaFila1 * sumaColumna1)) * 100,
-      positivoNegativo: (positivoNegativo / (sumaFila1 * sumaColumna2)) * 100,
-      negativoNegativo: (negativoNegativo / (sumaFila2 * sumaColumna2)) * 100,
-      negativoPositivo: (negativoPositivo / (sumaFila2 * sumaColumna1)) * 100,
+      positivoPositivo: factorDependenciaPositivoPositivo,
+      positivoNegativo: factorDependenciaPositivoNegativo,
+      negativoPositivo: factorDependenciaNegativoPositivo,
+      negativoNegativo: factorDependenciaNegativoNegativo,
     });
   };
   //*Esta funcion calcula el chi 2 y da los valores en el useState
@@ -245,11 +281,13 @@ const ReadExcelFile = () => {
     const sumaFila2 = negativoPositivo + negativoNegativo;
     const sumaColumna1 = positivoPositivo + negativoPositivo;
     const sumaColumna2 = positivoNegativo + negativoNegativo;
-
-    const ePP = (sumaFila1 * sumaColumna1) / 100;
-    const ePN = (sumaFila1 * sumaColumna2) / 100;
-    const eNP = (sumaFila2 * sumaColumna1) / 100;
-    const eNN = (sumaFila2 * sumaColumna2) / 100;
+    //*Suma del total de filas con valores
+    const sumaGeneral =
+      positivoPositivo + positivoNegativo + negativoPositivo + negativoNegativo;
+    const ePP = (sumaFila1 * sumaColumna1) / sumaGeneral;
+    const ePN = (sumaFila1 * sumaColumna2) / sumaGeneral;
+    const eNP = (sumaFila2 * sumaColumna1) / sumaGeneral;
+    const eNN = (sumaFila2 * sumaColumna2) / sumaGeneral;
 
     setChiCuadradoValores({
       positivoPositivo: (positivoPositivo - ePP) ** 2 / ePP,
