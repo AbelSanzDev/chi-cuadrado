@@ -5,7 +5,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
 
@@ -127,25 +126,23 @@ const HomePage = () => {
 
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1 font-serif text-xl">
-                  Integrantes
-                </ModalHeader>
-                <ModalBody className="text-xl font-thin pb-5">
-                  <h1>
-                    <strong>Lider de proyecto:</strong> Sánchez Urrea Abel
-                  </h1>
-                  <h1>Lizarraga Acosta Jose Yair</h1>
-                  <h1>Mendoza Lizarraga Rodolfo</h1>
-                  <h1>Noriega Fitch Fabio Manuel</h1>
-                  <h1>Quintero Herrera Irving Zuriel</h1>
-                  <h1>Rodriguez Cevallos Elena Del Carmen</h1>
-                  <h1>Rodriguez Dennis Jaime</h1>
-                  <h1>Tirado Rios Luis Mario</h1>
-                </ModalBody>
-              </>
-            )}
+            <>
+              <ModalHeader className="flex flex-col gap-1 font-serif text-xl">
+                Integrantes
+              </ModalHeader>
+              <ModalBody className="text-xl font-thin pb-5">
+                <h1>
+                  <strong>Lider de proyecto:</strong> Sánchez Urrea Abel
+                </h1>
+                <h1>Lizarraga Acosta Jose Yair</h1>
+                <h1>Mendoza Lizarraga Rodolfo</h1>
+                <h1>Noriega Fitch Fabio Manuel</h1>
+                <h1>Quintero Herrera Irving Zuriel</h1>
+                <h1>Rodriguez Cevallos Elena Del Carmen</h1>
+                <h1>Rodriguez Dennis Jaime</h1>
+                <h1>Tirado Rios Luis Mario</h1>
+              </ModalBody>
+            </>
           </ModalContent>
         </Modal>
       </div>
