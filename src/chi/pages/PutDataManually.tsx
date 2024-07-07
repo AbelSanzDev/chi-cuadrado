@@ -1315,22 +1315,22 @@ const PutDataManually = () => {
                       <td>{itemsSeleccionados[1]}</td>
                       {/**datos de primera fila */}
                       <td>{tablaDeContigencia.positivoPositivo}</td>
-                      <td>{tablaDeContigencia.positivoNegativo}</td>
+                      <td>{tablaDeContigencia.negativoPositivo}</td>
                       {/**Total de la fila 1 */}
                       <td>
                         {tablaDeContigencia.positivoPositivo +
-                          tablaDeContigencia.positivoNegativo}
+                          tablaDeContigencia.negativoPositivo}
                       </td>
                     </tr>
                     <tr className="text-center">
                       {/**Nombre de la fila 1*/}
                       <td>~{itemsSeleccionados[1]}</td>
                       {/**Datos de la segunda fila */}
-                      <td>{tablaDeContigencia.negativoPositivo}</td>
+                      <td>{tablaDeContigencia.positivoNegativo}</td>
                       <td>{tablaDeContigencia.negativoNegativo}</td>
                       {/**Total de la fila 2 */}
                       <td>
-                        {tablaDeContigencia.negativoPositivo +
+                        {tablaDeContigencia.positivoNegativo +
                           tablaDeContigencia.negativoNegativo}
                       </td>
                     </tr>
@@ -1338,10 +1338,10 @@ const PutDataManually = () => {
                       <td>Total</td>
                       <td>
                         {tablaDeContigencia.positivoPositivo +
-                          tablaDeContigencia.negativoPositivo}
+                          tablaDeContigencia.positivoNegativo}
                       </td>
                       <td>
-                        {tablaDeContigencia.positivoNegativo +
+                        {tablaDeContigencia.negativoPositivo +
                           tablaDeContigencia.negativoNegativo}
                       </td>
                       {/**Total de la general */}

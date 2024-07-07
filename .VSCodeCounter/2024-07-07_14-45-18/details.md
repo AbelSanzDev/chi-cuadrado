@@ -1,10 +1,10 @@
 # Details
 
-Date : 2024-07-05 09:25:27
+Date : 2024-07-07 14:45:18
 
 Directory c:\\Users\\abels\\OneDrive\\Escritorio\\proyecto-2-equipo-2\\src
 
-Total : 10 files,  868 codes, 414 comments, 33 blanks, all 1315 lines
+Total : 10 files,  1483 codes, 1290 comments, 32 blanks, all 2805 lines
 
 [Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
@@ -15,9 +15,9 @@ Total : 10 files,  868 codes, 414 comments, 33 blanks, all 1315 lines
 | [src/chi/components/MostrarTablaConDatos.tsx](/src/chi/components/MostrarTablaConDatos.tsx) | TypeScript JSX | 33 | 0 | 3 | 36 |
 | [src/chi/components/TablaDeContigencia.tsx](/src/chi/components/TablaDeContigencia.tsx) | TypeScript JSX | 6 | 0 | 3 | 9 |
 | [src/chi/helpers/chiCuadradoDatosTabla.ts](/src/chi/helpers/chiCuadradoDatosTabla.ts) | TypeScript | 7 | 0 | 0 | 7 |
-| [src/chi/pages/HomePage.tsx](/src/chi/pages/HomePage.tsx) | TypeScript JSX | 10 | 0 | 3 | 13 |
-| [src/chi/pages/PutDataManually.tsx](/src/chi/pages/PutDataManually.tsx) | TypeScript JSX | 446 | 108 | 13 | 567 |
-| [src/chi/pages/ReadExcelFile.tsx](/src/chi/pages/ReadExcelFile.tsx) | TypeScript JSX | 323 | 305 | 3 | 631 |
+| [src/chi/pages/HomePage.tsx](/src/chi/pages/HomePage.tsx) | TypeScript JSX | 150 | 0 | 4 | 154 |
+| [src/chi/pages/PutDataManually.tsx](/src/chi/pages/PutDataManually.tsx) | TypeScript JSX | 919 | 711 | 11 | 1,641 |
+| [src/chi/pages/ReadExcelFile.tsx](/src/chi/pages/ReadExcelFile.tsx) | TypeScript JSX | 325 | 578 | 3 | 906 |
 | [src/index.css](/src/index.css) | CSS | 12 | 0 | 2 | 14 |
 | [src/main.tsx](/src/main.tsx) | TypeScript JSX | 15 | 0 | 2 | 17 |
 | [src/vite-env.d.ts](/src/vite-env.d.ts) | TypeScript | 0 | 1 | 1 | 2 |
