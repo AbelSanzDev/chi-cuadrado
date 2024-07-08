@@ -185,33 +185,33 @@ const ReadExcelFile = () => {
         (positivoPositivo / (positivoPositivo + positivoNegativo)) * 100,
       ],
       positivoNegativoItem1AHead: [
-        (positivoNegativo / sumaGeneral) * 100,
-        (positivoNegativo / (positivoPositivo + positivoNegativo)) * 100,
+        (negativoPositivo / sumaGeneral) * 100,
+        (negativoPositivo / (positivoPositivo + negativoPositivo)) * 100,
       ],
       negativoPositivoItem1AHead: [
-        (negativoPositivo / sumaGeneral) * 100,
-        (negativoPositivo / (negativoPositivo + negativoNegativo)) * 100,
+        (positivoNegativo / sumaGeneral) * 100,
+        (positivoNegativo / (negativoPositivo + positivoNegativo)) * 100,
       ],
       negativoNegativoItem1AHead: [
         (negativoNegativo / sumaGeneral) * 100,
-        (negativoNegativo / (negativoPositivo + negativoNegativo)) * 100,
+        (negativoNegativo / (positivoNegativo + negativoNegativo)) * 100,
       ],
       //*Cuando se comienza con el item 2
       positivoPositivoItem2AHead: [
         (positivoPositivo / sumaGeneral) * 100,
-        (positivoPositivo / (positivoPositivo + negativoPositivo)) * 100,
+        (positivoPositivo / (positivoPositivo + positivoNegativo)) * 100,
       ],
       positivoNegativoItem2AHead: [
-        (negativoPositivo / sumaGeneral) * 100, //*Es negativoPositivo porque es en base a las coordenadas
-        (negativoPositivo / (positivoPositivo + negativoPositivo)) * 100,
+        (positivoNegativo / sumaGeneral) * 100, //*Es negativoPositivo porque es en base a las coordenadas
+        (positivoNegativo / (positivoPositivo + positivoNegativo)) * 100,
       ],
       negativoPositivoItem2AHead: [
-        (positivoNegativo / sumaGeneral) * 100, //*Es positivoNegativo porque es en base a las coordenadas
-        (positivoNegativo / (positivoNegativo + negativoNegativo)) * 100,
+        (negativoPositivo / sumaGeneral) * 100, //*Es positivoNegativo porque es en base a las coordenadas
+        (negativoPositivo / (negativoPositivo + negativoNegativo)) * 100,
       ],
       negativoNegativoItem2AHead: [
         (negativoNegativo / sumaGeneral) * 100,
-        (negativoNegativo / (positivoNegativo + negativoNegativo)) * 100,
+        (negativoNegativo / (negativoPositivo + negativoNegativo)) * 100,
       ],
     });
   };
