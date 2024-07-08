@@ -546,7 +546,7 @@ const PutDataManually = () => {
     setCoberturaConfianzaValores({
       positivoPositivoItem1AHead: [
         (positivoPositivo / sumaGeneral) * 100,
-        (positivoPositivo / (positivoPositivo + positivoNegativo)) * 100,
+        (positivoPositivo / (positivoPositivo + negativoPositivo)) * 100,
       ],
       positivoNegativoItem1AHead: [
         (negativoPositivo / sumaGeneral) * 100,
@@ -554,7 +554,7 @@ const PutDataManually = () => {
       ],
       negativoPositivoItem1AHead: [
         (positivoNegativo / sumaGeneral) * 100,
-        (positivoNegativo / (negativoPositivo + positivoNegativo)) * 100,
+        (positivoNegativo / (negativoNegativo + positivoNegativo)) * 100,
       ],
       negativoNegativoItem1AHead: [
         (negativoNegativo / sumaGeneral) * 100,
